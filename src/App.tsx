@@ -17,8 +17,13 @@ const App: React.FC = () => {
             tick();
         }, 1000);
 
+        const geolocationTimerId = setInterval(() => {
+            getGeolocation();
+        }, 60000);
+
         return () => {
             clearInterval(timerId);
+            clearInterval(geolocationTimerId);
         };
     });
 
@@ -42,6 +47,12 @@ const App: React.FC = () => {
         setHour(hour);
         setMinute(minute);
         setSecond(second);
+    };
+
+    const getGeolocation = () => {
+        navigator.geolocation.getCurrentPosition((possition) => {
+            console.log(possition);
+        });
     };
 
     return (
