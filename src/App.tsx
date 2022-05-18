@@ -12,6 +12,8 @@ const App: React.FC = () => {
     const [minute, setMinute] = useState('');
     const [second, setSecond] = useState('');
 
+    const [weatherText, setWeatherText] = useState('');
+
     useEffect(() => {
         const DayList = ['SUN', 'MON', 'THU', 'WED', 'TUE', 'FRI', 'SAT'];
         const tick = () => {
@@ -45,7 +47,17 @@ const App: React.FC = () => {
 
                 Axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${Config.openWeatherMapApiKey}`)
                     .then((response) => {
-                        console.log(response);
+                        console.log(response.data);
+                        const main = response.data.main;
+                        const weather = response.data.weather;
+
+                        const weatherText = response.data.weather[0].main;
+                        const icon = response.data.weather[0].icon;
+
+                        console.log(weatherText);
+                        console.log(icon);
+
+                        setWeatherText(weatherText);
                     })
                     .catch((error) => {
                         console.error(error);
@@ -62,7 +74,7 @@ const App: React.FC = () => {
 
         const geolocationTimerId = setInterval(() => {
             getGeolocation();
-        }, 60000);
+        }, 600000);
 
         return () => {
             clearInterval(timerId);
@@ -72,14 +84,19 @@ const App: React.FC = () => {
 
     return (
         <div className='App'>
-            <div className='clock'>
-                <div className='date'>
-                    {year} / {month} / {date} ({day})
+            <div className='content'>
+                <div className='clock'>
+                    <div className='date'>
+                        {year}/{month}/{date} ({day})
+                    </div>
+                    <div className='time'>
+                        {hour}:{minute}
+                        <span className='second'>{second}</span>
+                    </div>
                 </div>
-                <div className='time'>
-                    {hour} : {minute}
-                    <span className='second'>{second}</span>
-                </div>
+            </div>
+            <div className='weather'>
+                <div className='weather-text'>{weatherText}</div>
             </div>
         </div>
     );

@@ -1,8 +1,12 @@
 .App {
     width: 100vw;
-    height: 100vh;
+    height: 90vh;
+}
 
+.content {
+    min-height: calc(100vh - 50px);
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
 }
@@ -23,4 +27,13 @@
     width: 50px;
     margin-left: 10px;
     font-size: 0.5em;
+}
+
+.weather {
+    width: calc(100vw - 40px);
+    height: 50px;
+    padding: 0 20px 0 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
