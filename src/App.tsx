@@ -13,9 +13,38 @@ const App: React.FC = () => {
     const [second, setSecond] = useState('');
 
     const [weatherText, setWeatherText] = useState('');
+    const [weatherIcon, setWeatherIcon] = useState('');
+    const [temp, setTemp] = useState('');
 
     useEffect(() => {
         const DayList = ['SUN', 'MON', 'THU', 'WED', 'TUE', 'FRI', 'SAT'];
+
+        let count = 0;
+
+        const getGeolocation = () => {
+            navigator.geolocation.getCurrentPosition((possition) => {
+                const lat = possition.coords.latitude;
+                const lon = possition.coords.longitude;
+
+                Axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&appid=${Config.openWeatherMapApiKey}`)
+                    .then((response) => {
+                        const main = response.data.main;
+                        const weather = response.data.weather;
+
+                        const weatherText = weather[0].main;
+                        const icon = `${process.env.PUBLIC_URL}/weather_icons/${weather[0].icon}.png`;
+                        const temp = main.temp;
+
+                        setWeatherText(weatherText);
+                        setWeatherIcon(icon);
+                        setTemp(temp);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            });
+        };
+
         const tick = () => {
             const currentDate = new Date();
 
@@ -36,49 +65,23 @@ const App: React.FC = () => {
             setHour(hour);
             setMinute(minute);
             setSecond(second);
+
+            if (count > 600) {
+                getGeolocation();
+                count = 0;
+            }
+
+            count++;
         };
-
-        const getGeolocation = () => {
-            navigator.geolocation.getCurrentPosition((possition) => {
-                console.log(possition);
-
-                const lat = possition.coords.latitude;
-                const lon = possition.coords.longitude;
-
-                Axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${Config.openWeatherMapApiKey}`)
-                    .then((response) => {
-                        console.log(response.data);
-                        const main = response.data.main;
-                        const weather = response.data.weather;
-
-                        const weatherText = response.data.weather[0].main;
-                        const icon = response.data.weather[0].icon;
-
-                        console.log(weatherText);
-                        console.log(icon);
-
-                        setWeatherText(weatherText);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            });
-        };
-
-        tick();
-        getGeolocation();
 
         const timerId = setInterval(() => {
             tick();
         }, 1000);
 
-        const geolocationTimerId = setInterval(() => {
-            getGeolocation();
-        }, 600000);
+        getGeolocation();
 
         return () => {
             clearInterval(timerId);
-            clearInterval(geolocationTimerId);
         };
     }, []);
 
@@ -96,7 +99,10 @@ const App: React.FC = () => {
                 </div>
             </div>
             <div className='weather'>
-                <div className='weather-text'>{weatherText}</div>
+                <div className='weather-text'>{temp} ℃</div>
+                <div className='weather-icon'>
+                    <img src={weatherIcon} alt={weatherText}></img>
+                </div>
             </div>
         </div>
     );
