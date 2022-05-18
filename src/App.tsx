@@ -16,6 +16,17 @@ const App: React.FC = () => {
     const [weatherIcon, setWeatherIcon] = useState('');
     const [temp, setTemp] = useState('');
 
+    /**
+     * 指定した数字を2桁までの0で埋めます。
+     * @param value ゼロ埋めをする数字を指定します。
+     * @returns ゼロ埋めをした数字を文字列として返します。
+     */
+    const zeroPadding = (value: number) => {
+        const ret = ('00' + value).slice(-2);
+
+        return ret;
+    };
+
     useEffect(() => {
         const DayList = ['SUN', 'MON', 'THU', 'WED', 'TUE', 'FRI', 'SAT'];
 
@@ -49,8 +60,8 @@ const App: React.FC = () => {
             const currentDate = new Date();
 
             const year = currentDate.getFullYear().toString();
-            const month = ('00' + (currentDate.getMonth() + 1)).slice(-2);
-            const date = ('00' + currentDate.getDate()).slice(-2);
+            const month = zeroPadding(currentDate.getMonth() + 1);
+            const date = zeroPadding(currentDate.getDate());
             setYear(year);
             setMonth(month);
             setDate(date);
@@ -58,9 +69,9 @@ const App: React.FC = () => {
             const day = DayList[currentDate.getDay()];
             setDay(day);
 
-            const hour = ('00' + currentDate.getHours()).slice(-2);
-            const minute = ('00' + currentDate.getMinutes()).slice(-2);
-            const second = ('00' + currentDate.getSeconds()).slice(-2);
+            const hour = zeroPadding(currentDate.getHours());
+            const minute = zeroPadding(currentDate.getMinutes());
+            const second = zeroPadding(currentDate.getSeconds());
 
             setHour(hour);
             setMinute(minute);
