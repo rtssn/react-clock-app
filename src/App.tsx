@@ -16,6 +16,9 @@ const App: React.FC = () => {
     const [weatherIcon, setWeatherIcon] = useState('');
     const [temp, setTemp] = useState('');
 
+    const [lon, setLon] = useState(0);
+    const [lat, setLat] = useState(0);
+
     /**
      * 指定した数字を2桁までの0で埋めます。
      * @param value ゼロ埋めをする数字を指定します。
@@ -32,10 +35,13 @@ const App: React.FC = () => {
 
         let count = 0;
 
-        const getGeolocation = () => {
+        const getLocationWeather = () => {
             navigator.geolocation.getCurrentPosition((possition) => {
                 const lat = possition.coords.latitude;
                 const lon = possition.coords.longitude;
+
+                setLat(lat);
+                setLon(lon);
 
                 Axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&appid=${Config.openWeatherMapApiKey}`)
                     .then((response) => {
@@ -78,7 +84,7 @@ const App: React.FC = () => {
             setSecond(second);
 
             if (count > 600) {
-                getGeolocation();
+                getLocationWeather();
                 count = 0;
             }
 
@@ -89,7 +95,7 @@ const App: React.FC = () => {
             tick();
         }, 1000);
 
-        getGeolocation();
+        getLocationWeather();
 
         return () => {
             clearInterval(timerId);
@@ -109,12 +115,17 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </div>
-            <div className='weather'>
-                <div className='weather-text'>{temp} ℃</div>
-                <div className='weather-icon'>
-                    <img src={weatherIcon} alt={weatherText}></img>
+            <footer>
+                <div className='location'>
+                    {lat}, {lon}
                 </div>
-            </div>
+                <div className='weather'>
+                    <div className='weather-text'>{temp} ℃</div>
+                    <div className='weather-icon'>
+                        <img src={weatherIcon} alt={weatherText}></img>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };
