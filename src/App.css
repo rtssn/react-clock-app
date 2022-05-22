@@ -4,7 +4,7 @@
 }
 
 .content {
-    min-height: calc(100vh - 50px);
+    min-height: calc(100vh - 80px);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -29,19 +29,26 @@
     font-size: 0.5em;
 }
 
+footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
 .weather {
-    width: calc(100vw - 40px);
-    height: 50px;
-    padding: 0 20px 0 20px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    width: calc(100vw - 40px);
+    height: 80px;
+    padding: 0 20px 0 20px;
 }
 
 .weather-text {
     margin-right: 10px;
+    font-size: 20px;
 }
 
 .weather-icon img {
-    height: 40px;
+    height: 70px;
 }
