@@ -50,7 +50,8 @@ const App: React.FC = () => {
 
                         const weatherText = weather[0].main;
                         const icon = `${process.env.PUBLIC_URL}/weather_icons/${weather[0].icon}.png`;
-                        const temp = main.temp;
+                        let temp = main.temp;
+                        temp = Math.round(temp * 10) / 10;
 
                         setWeatherText(weatherText);
                         setWeatherIcon(icon);
