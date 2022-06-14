@@ -18,8 +18,6 @@ const App: React.FC = () => {
     const [weatherIcon, setWeatherIcon] = useState('');
     const [temp, setTemp] = useState('');
 
-    const [lon, setLon] = useState(0);
-    const [lat, setLat] = useState(0);
     const [city, setCity] = useState('');
 
     /**
@@ -42,9 +40,6 @@ const App: React.FC = () => {
             navigator.geolocation.getCurrentPosition((possition) => {
                 const lat = possition.coords.latitude;
                 const lon = possition.coords.longitude;
-
-                setLat(lat);
-                setLon(lon);
 
                 if (lat != null && lon != null) {
                     openReverseGeocoder([lon, lat])
