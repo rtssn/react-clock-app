@@ -13,4 +13,6 @@ class Config {
      */
     public static readonly openWeatherMapApiKey = 'API key'
 }
+
+export defalut Config;
 ```
