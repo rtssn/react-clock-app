@@ -1,7 +1,9 @@
 import {useEffect, useState} from 'react';
+import React from 'react';
 import Axios from 'axios';
 import Config from './config';
 import './App.css';
+import {openReverseGeocoder} from '@geolonia/open-reverse-geocoder';
 
 const App: React.FC = () => {
     const [year, setYear] = useState('');
@@ -18,6 +20,7 @@ const App: React.FC = () => {
 
     const [lon, setLon] = useState(0);
     const [lat, setLat] = useState(0);
+    const [city, setCity] = useState('');
 
     /**
      * 指定した数字を2桁までの0で埋めます。
@@ -42,6 +45,16 @@ const App: React.FC = () => {
 
                 setLat(lat);
                 setLon(lon);
+
+                if (lat != null && lon != null) {
+                    openReverseGeocoder([lon, lat])
+                        .then((result) => {
+                            setCity(result.city);
+                        })
+                        .catch((reason) => {
+                            console.error(reason);
+                        });
+                }
 
                 Axios.get(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&appid=${Config.openWeatherMapApiKey}`)
                     .then((response) => {
@@ -117,9 +130,7 @@ const App: React.FC = () => {
                 </div>
             </div>
             <footer>
-                <div className='location'>
-                    {lat}, {lon}
-                </div>
+                <div className='location'>{city}</div>
                 <div className='weather'>
                     <div className='weather-text'>{temp} ℃</div>
                     <div className='weather-icon'>
