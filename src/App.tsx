@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import React from 'react';
 import Axios from 'axios';
-import Config from './config';
+import Config from './Config';
 import './App.css';
 import {openReverseGeocoder} from '@geolonia/open-reverse-geocoder';
 
